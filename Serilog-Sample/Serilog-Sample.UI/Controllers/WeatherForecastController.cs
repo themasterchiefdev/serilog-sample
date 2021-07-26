@@ -26,6 +26,7 @@ namespace Serilog_Sample.UI.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            _logger.LogInformation("Hello! {Name}","rajiv yanamandra");
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {

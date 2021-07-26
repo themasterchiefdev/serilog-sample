@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Serilog_Sample.UI
 {
@@ -17,7 +18,13 @@ namespace Serilog_Sample.UI
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder =>
+            Host.CreateDefaultBuilder(args)
+                .UseSerilog((context, services, configuration) => configuration
+                                                                  .ReadFrom.Configuration(context.Configuration)
+                                                                  .ReadFrom.Services(services)
+                                                                  .Enrich.FromLogContext()
+                                                                  .WriteTo.Console())
+                .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
             });
